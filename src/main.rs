@@ -97,7 +97,7 @@ impl Sandbox for Calculator {
     }
 
     fn title(&self) -> String {
-        "简单计算器 ~ A Simple Caculator".into()
+        "简单计算器 ~ A Simple Calculator".into()
     }
 
     fn update(&mut self, message: Self::Message) {
