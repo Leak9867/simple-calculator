@@ -111,12 +111,10 @@ impl Sandbox for Calculator {
                     }
                 } else if !self.left.is_empty() && self.shadow {
                     self.clear(n);
+                } else if &self.right == "0" {
+                    self.right = n.into()
                 } else {
-                    if &self.right == "0" {
-                        self.right = n.into()
-                    } else {
-                        self.right.push(n)
-                    }
+                    self.right.push(n)
                 }
             },
             Message::Ans => {
@@ -179,14 +177,12 @@ impl Sandbox for Calculator {
                             self.left.remove(0);
                         }
                     }
-                } else {
-                    if &self.right != "0" && &self.left != "0." {
-                        if self.right.find('-').is_none() {
-                            self.right.insert(0, '-');
-                        } else {
-                            self.right.remove(0);
-                        }
-                    }   
+                } else if &self.right != "0" && &self.left != "0." {
+                    if self.right.find('-').is_none() {
+                        self.right.insert(0, '-');
+                    } else {
+                        self.right.remove(0);
+                    }
                 }
             },
         }
@@ -202,7 +198,7 @@ impl Sandbox for Calculator {
             .push(
                     Text::new(
                         if self.shadow {
-                            format!("{}", self.left)
+                            self.left.to_string()
                         } else {
                             format!("{} {} {}", self.left, self.sign, self.right)
                         })
@@ -479,9 +475,7 @@ mod style {
                     Button::Num => Color::from_rgb8(242, 243, 242),
                     Button::Func => Color::from_rgb8(216, 218, 217),
                 })),
-                border_radius: match self {
-                    _ => 1.0,
-                },
+                border_radius: 1.0,
                 shadow_offset: Vector::new(1.0, 1.0),
                 text_color: match self {
                     Button::Ans => Color::WHITE,
